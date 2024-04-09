@@ -1,0 +1,51 @@
+<?php
+// Include database connection
+include "database_connection.php";
+
+// Check if the form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Retrieve form data
+    $username = $_POST['username'];
+    $password = $_POST['pass'];
+    $name = $_POST['name'];
+    $address = $_POST['address'];
+    $email = $_POST['email'];
+    $phone = $_POST['phone'];
+    
+    // Check if username already exists
+    $checkSql = "SELECT * FROM users WHERE username = ?";
+    $checkStmt = $conn->prepare($checkSql);
+    $checkStmt->bind_param("s", $username);
+    $checkStmt->execute();
+    $result = $checkStmt->get_result();
+    if ($result->num_rows > 0) {
+        // Username already exists
+        echo "Username already taken. Please choose a different username.";
+        $checkStmt->close(); // Close check statement
+    } else {
+        // Username does not exist, proceed with insertion
+        $sql = "INSERT INTO users (username, pass, name, email, phone, address) VALUES (?, ?, ?, ?, ?, ?)";
+        $stmt = $conn->prepare($sql);
+        if ($stmt === false) {
+            // Handle error in statement preparation
+            echo "Error preparing statement: " . $conn->error;
+            // Optionally, close the database connection here if not using it later
+        } else {
+            $stmt->bind_param("ssssss", $username, $password, $name, $email, $phone, $address);
+            $stmt->execute();
+
+            // Check if the insertion was successful
+            if ($stmt->affected_rows > 0) {
+                header("Location: http://localhost/homeproject/regdone.html");
+            } else {
+                echo "Error: " . $stmt->error;
+            }
+
+            // Close the prepared statement
+            $stmt->close();
+        }
+    }
+    // Close database connection
+    $conn->close();
+}
+?>

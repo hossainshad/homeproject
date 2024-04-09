@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        background-image: url(./contents/Images/frontbg.png);
+      }
+
+      h1 {
+        color: rgb(0, 86, 126);
+        margin-bottom: 0;
+      }
+
+      h2 {
+        color: rgb(0, 86, 126);
+        margin-top: 0;
+      }
+
+      .topbox {
+        background-color: transparent;
+        height: 100px;
+        width: fill;
+        padding-top: 0;
+        margin-top: 100px;
+      }
+
+      .register {
+        background-color: rgba(90, 112, 141, 0.5);
+        height: 345px;
+        width: 600px;
+        display: inline-block;
+        border-radius: 10%;
+        position: fixed;
+        top: 55%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .button1 {
+        width: 500px;
+        height: 85px;
+        background-color: #05469ca4;
+        color: white;
+        text-align: center;
+        border: 3px solid white;
+        cursor: pointer;
+        margin-top: 50px;
+        margin-left: 40px;
+      }
+
+      .button1:hover {
+        background-color: #063068;
+        /* Darken the background color on hover */
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="topbox">
+      <h1 style="text-align: center; font-size: 70px">Welcome to Homify</h1>
+      <h2 style="text-align: center; font-size: 30px">Connecting hearts to homes.</h2>
+    </div>
+    <div id="parentdiv">
+      <div class="register">
+        <a href="./login/log.html" style="text-decoration: none">
+          <div class="button1">
+            <h1 style="color: white">Login</h1>
+          </div>
+        </a>
+        <a href="./register.php" style="text-decoration: none">
+          <div class="button1">
+            <h1 style="color: white">Register</h1>
+          </div>
+        </a>
+      </div>
+    </div>
+  </body>
+</html>
