@@ -1,45 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Owner Dashboard</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-      }
-      .container {
-        width: 90%;
-        margin: auto;
-      }
-      .property {
-        margin: 10px;
-        padding: 10px;
-        background-color: #f0f0f0;
-        cursor: pointer;
-      }
-      .button {
-        background-color: #4caf50;
-        border: none;
-        color: white;
-        padding: 10px 20px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        margin: 4px 2px;
-        cursor: pointer;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <h1>Owner Dashboard</h1>
-      <button class="button" onclick="location.href='add_property.php'">Add New Property</button>
-      <h2>Your Properties:</h2>
-      <div id="property-list">
-        <!-- Properties will be loaded here using PHP -->
-        <?php include 'list_properties.php'; ?>
-      </div>
-    </div>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    div{
+      padding: 10px;
+      margin-bottom: 5px;
+      background-color: #f4f4f4;
+      border: 1px solid #ddd;
+      word-wrap: break-word;
+      width: 250px;
+    }
+    div:hover{
+      background-color: aqua;
+    }
+  </style>
+</head>
+<body>
+  <ul>
+    <li>
+      <a href="facebook.com" style="text-decoration: none; font-size: larger;">
+        <div>
+          <p>
+            property
+          </p>
+        </div>
+      </a>
+    </li>
+  </ul>
+  
+</body>
 </html>

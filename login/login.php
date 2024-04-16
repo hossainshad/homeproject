@@ -4,9 +4,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     include "../database_connection.php";
     $username = $_POST['username'];
     $password = $_POST['password'];
-
-
-
     $sql = "SELECT * FROM users WHERE username='$username' AND
     pass='$password'";
     
@@ -14,11 +11,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($result->num_rows >0){
       $_SESSION['username'] = $username;
-      header("Location: http://localhost/homeproject/index/index.php");
+      header("Location: ../index/index.php");
       exit();
-    } 
+    }
     else {
-      echo "<h1 style='color: white; position: absolute;top:180px;right:39%'>Invalid Username or Password</h1>";
+      echo "<h1 style='color: white; position: absolute;top:10%;right:35%'>Invalid Username or Password</h1>";
     }
 
 

@@ -4,7 +4,7 @@ include "../database_connection.php";
 if (isset($_SESSION['username'])) {
     $username = $_SESSION['username'];
 } else {
-    header("Location: http://localhost/homeproject/login/login.php");
+    header("Location: http://homify.local/login/login.php");
     exit();
 }
 $query = "SELECT name FROM users WHERE username = '$username'";
@@ -37,7 +37,11 @@ $fullName = $row['name'];
         Tenantship Dashboard
       </a>
     </div>
-
+    <div style= "position: absolute; top:90%;left: 3%">
+      <a href="../logout.php" class="button" style="color:red">
+        Logout
+      </a>
+    </div>
   </div>
 </body>
 

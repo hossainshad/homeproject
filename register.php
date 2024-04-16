@@ -14,17 +14,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check if username exists
     $result = $conn->query("SELECT * FROM users WHERE username = '$username'");
     if ($result->num_rows > 0) {
-        echo "<h1 style='color: white; position: absolute;top:40px;right:30%'>Username already taken. Please choose a different username.</h1>";
+        echo "<div><h1 style='color: white; position: absolute;top:2%;right:25%'>Username already taken. Please choose a different username.</h1></div>";
     } else {
         // Check if email exists
         $result = $conn->query("SELECT * FROM users WHERE email = '$email'");
         if ($result->num_rows > 0) {
-            echo "<h1 style='color: white; position: absolute;top:40px;right:30%'>Email already taken. Please choose a different email.</h1>";
+            echo "<h1 style='color: white; position: absolute;top:2%;right:25%'>Email already taken. Please choose a different email.</h1>";
         } else {
             // Insert the new user
             $sql = "INSERT INTO users (username, pass, name, email, phone, address) VALUES ('$username', '$password', '$name', '$email', '$phone', '$address')";
             if ($conn->query($sql) === TRUE) {
-                header("Location: http://localhost/homeproject/regdone.html");
+                header("Location: http://localhost/regdone.html");
             } else {
                 echo "Error: " . $sql . "<br>" . $conn->error;
             }
