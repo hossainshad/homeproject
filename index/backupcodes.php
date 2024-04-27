@@ -1,11 +1,145 @@
-
-if (isset($_GET['p_id'])) {
-    $p_id = $_GET['p_id'];
-    $sql = "SELECT * FROM flats WHERE p_id = '$p_id'";
-    $result = $conn->query($sql);
+<?php
+session_start();
+include "../database_connection.php";
+include "side-bar.php";
+if (isset($_SESSION['username'])) {
+    $username = $_SESSION['username'];
 } else {
-    echo "Property ID not Found.";
+    header("Location: http://homify.local/login/login.php");
+    exit();
+}
+$sql_u = "SELECT t_flag, tenant_f_id FROM users WHERE username = '$username'";
+$result = mysqli_query($conn, $sql_u);
+$row = mysqli_fetch_assoc($result);
+$t_flag = $row['t_flag'];
+$tenant_f_id = $row['tenant_f_id'];
+
+$rentals_q = "SELECT * FROM rentals  WHERE f_id = '$tenant_f_id'";
+$rentals_result = mysqli_query($conn, $rentals_q);
+$rentals = mysqli_fetch_assoc($rentals_result);
+$rental_id = $rentals['rental_id'];
+$payment_query = "SELECT payment_month FROM payments WHERE rental_id = '$rental_id' AND payment_month = LPAD(MONTH(CURDATE()), 2, '0')";
+$payment_result = mysqli_query($conn, $payment_query);
+$payment_row = mysqli_fetch_assoc($payment_result);
+if ($payment_row) {
+    $payment_month = $payment_row['payment_month'];
+    $payment_status = "<p>Payment status: <span style='color: green;'>Paid for this month</span></p>";
+}
+else {
+    $payment_status = "<p>Payment status: <span style='color: red;'>Unaid for this month</span></p>";
 }
 
-<h1>Flats in the <?php echo $properties['p_name'] . " - " . $properties['location_a']; ?></h1>
-<h1>Flats in the <?php echo $properties['p_name'] . '-' . $properties['location_a']; ?></h1>
+
+if (is_null($tenant_f_id)) {
+
+    $tenant_message = "You are not a tenant yet.";
+} else {
+    $sql = "SELECT f.*, p.address
+            FROM flats f
+            JOIN properties p ON f.p_id = p.p_id
+            WHERE f.f_id = '$tenant_f_id'";
+    $sql_result = mysqli_query($conn, $sql);
+    $flat = mysqli_fetch_assoc($sql_result);
+    $p_id = $flat["p_id"];
+    $image_path = $flat["image_path"];
+    $location = $flat["address"];
+    $rent_amount = $flat["rent_amount"];
+
+    $property_query = "SELECT * FROM properties where p_id = '$p_id'";
+    $property_result = mysqli_query($conn, $property_query);
+    $property=mysqli_fetch_assoc($property_result);
+    $o_username = $property["o_username"];
+
+    $owner_q = "SELECT * FROM users where username = '$o_username'";
+    $owner_result = mysqli_query($conn, $owner_q);
+    $owner = mysqli_fetch_assoc($owner_result);
+    $owner_name = $owner["name"];
+    $owner_email = $owner["email"];
+    $owner_phone = $owner["phone"];
+
+
+
+    $owner_info = "<h2>Owner Information:</h2>
+                      <p>Name: $owner_name</p>
+                      <p>Username: $o_username</p>
+                      <p>Phone: $owner_phone</p>
+                      <p>Email: $owner_email</p>";
+    
+
+    if ($property['lift_status'] == 1) {
+        $lift = "yes";
+    } else {
+        $lift = "No";
+    }
+}
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="index.css">
+    <style>
+        .rental-info {
+        background-color: #f2f2f2;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        text-align: left;
+        margin-left: 20px;
+        border-width: 4px;
+        border-color: black;
+        }
+
+        .rental-info h2 {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        }
+
+        .rental-info p {
+        font-size: 16px;
+        margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <?php if ($t_flag == 0) { ?>
+        <h1 style="position:relative;left : 500px"><?php echo $tenant_message; ?></h1>
+    <?php } else { ?>
+        <div class='f_details'>
+            <div>
+                <img class="main_image" src="<?php echo $image_path; ?>" alt="">
+            </div>
+            <h1><?php echo $flat['sqft'] . ' SQFT flat in ' . $location; ?></h1>
+            <div class="details">
+                <h2><?php echo "Beds: <span>" . $flat['beds'] . "</span>"; ?></h2>
+                <h2><?php echo "Baths: <span>" . $flat['baths'] . "</span>"; ?></h2>
+                <h2><?php echo "Floor: <span>" . $flat['floor'] . "</span>"; ?></h2>
+                <h2><?php echo "Area(SQFT): <span>" . $flat['sqft'] . "</span>"; ?></h2>
+                <h2><?php echo "Lift: <span>" . $lift . "</span>"; ?></h2>
+                <h2><?php echo "Full Address: <span>" . $flat['address'] . "</span>"; ?></h2>
+                <h2><?php echo "Rent(BDT): <span>" . $rent_amount . "</span>"; ?></h2>
+                <h2><?php echo "Additional Details: <span>" . $flat['additional_info'] . "</span>"; ?></h2>
+            </div>
+        </div>
+
+    <?php } ?>
+    <div class="rental_info;" style="position:absolute; right:50px; top:30px">
+        <div class="rental-info">
+            <h2><?php echo $owner_info; ?></h2>
+        </div>
+    </div>
+    <div class="rental_info;" style="position:absolute; right:50px; top:450px">
+        <div class="rental-info">
+            <h2>Payment</h2>
+            <h2> <?php echo $payment_status; ?> </h2>
+
+            <a href="payment_box.php"><button class= "btn">Make payment</button></a>
+
+        </div>
+    </div>
+</body>
+</html>

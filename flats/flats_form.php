@@ -106,7 +106,11 @@ if (isset($_SESSION['username'])) {
       </div>
       <div class="form-group">
         <label for="sqft">Flat total area(SquareFeet):</label>
-        <input type="text" id="sqft" pattern="[1-9]*" maxlength="9" name="sqft" required />
+        <input type="text" id="sqft" pattern="[0-9]*" maxlength="9" name="sqft" required />
+      </div>
+      <div class="form-group">
+        <label for="rent_amount">Rent (per month):</label>
+        <input type="text" id="rent_amount" pattern="[0-9]*" maxlength="9" name="rent_amount" required />
       </div>
       <div class="form-group">
         <label for="floor">Floor Number:</label>
@@ -119,8 +123,7 @@ if (isset($_SESSION['username'])) {
       <div style="padding-bottom:10px">
         <h4>Primary Image:</h4>
         <input type="file" name="image" required>
-        <h4>Additional Images:</h4>
-        <input type="file" name="additional_images[]" multiple required>
+        
       </div>
       <div class="form-group">
         <button type="submit">Add this property</button>

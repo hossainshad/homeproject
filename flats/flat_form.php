@@ -18,24 +18,25 @@ if (isset($_SESSION['username'])) {
         $sqft = $_POST['sqft'];
         $floor = $_POST['floor'];
         $additional_info = $_POST['additional_info'];
-        $sql = "INSERT INTO flats (p_id, flat_num, beds, baths, sqft,floor, additional_info) VALUES ('$p_id', '$flat_num', '$beds', '$baths', '$sqft','$floor','$additional_info')";
+        $rent_amount = $_POST['rent_amount'];
+        $sql = "INSERT INTO flats (p_id, flat_num, beds, baths, sqft,floor, additional_info,rent_amount) VALUES ('$p_id', '$flat_num', '$beds', '$baths', '$sqft','$floor','$additional_info',$rent_amount)";
     
 
         if ($conn->query($sql) === TRUE) {
-            $flat_id = $conn->insert_id; // Get the inserted flat's ID
-            // Handle image upload
+            $flat_id = $conn->insert_id; 
+        
             if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-                $image_path = $_SERVER['DOCUMENT_ROOT'] . '/uploads//' . basename($_FILES['image']['name']);
-                move_uploaded_file($_FILES['image']['tmp_name'], $image_path);
-                // Update the flat's image path
+                $image_path = '/uploads/' . basename($_FILES['image']['name']);
+                move_uploaded_file($_FILES['image']['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . $image_path);
+        
                 $sql_update_image = "UPDATE flats SET image_path = '$image_path' WHERE f_id = $flat_id";
                 $conn->query($sql_update_image);
             }
             if (isset($_FILES['additional_images']) && is_array($_FILES['additional_images']['tmp_name'])) {
                 foreach ($_FILES['additional_images']['tmp_name'] as $key => $tmp_name) {
                     $filename = $_FILES['additional_images']['name'][$key];
-                    $image_path = $_SERVER['DOCUMENT_ROOT'] . '/uploads//' . basename($filename);
-                    move_uploaded_file($tmp_name, $image_path);
+                    $image_path = '/uploads/' . basename($filename);
+                    move_uploaded_file($tmp_name, $_SERVER['DOCUMENT_ROOT'] . $image_path);
             
                     $sql_insert_image = "INSERT INTO flat_images (f_id, a_image_path) VALUES ($flat_id, '$image_path')";
                     $conn->query($sql_insert_image);
